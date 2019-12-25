@@ -242,7 +242,9 @@ class _ContestListState extends State<ContestList>
                         title: Text(snapshot.data.contests[index].name),
                         onTap: () => launch(snapshot.data.contests[index].url),
                         subtitle: Text(startDateTime.day.toString() +
+                            '/' +
                             startDateTime.month.toString() +
+                            ' ' +
                             timepicked.hourOfPeriod.toString() +
                             ':' +
                             timepicked.minute.toString() +

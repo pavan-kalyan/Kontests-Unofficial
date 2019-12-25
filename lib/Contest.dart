@@ -46,10 +46,10 @@ class Contest {
     return Contest(
       name: json['name'],
       url: json['url'],
-      start_time: new DateFormat("yyyy-mm-ddThh:mm:ss.SSSZ")
+      start_time: new DateFormat("yyyy-MM-ddThh:mm:ss.SSSZ")
           .parseUtc(json['start_time']),
       end_time:
-          new DateFormat("yyyy-mm-ddThh:mm:ss.SSSZ").parseUtc(json['end_time']),
+          new DateFormat("yyyy-MM-ddThh:mm:ss.SSSZ").parseUtc(json['end_time']),
       duration: json['duration'],
       site: json['site'],
       in_24_hours: within_24,
