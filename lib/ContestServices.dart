@@ -1,4 +1,5 @@
 import 'dart:async' show Future;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_cache_store/flutter_cache_store.dart';
 import 'dart:convert';
 import 'package:kontests/Contest.dart';
