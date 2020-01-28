@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
 import 'package:http/http.dart' as http;
@@ -236,8 +239,11 @@ class _ContestListState extends State<ContestList>
                           snapshot.data.contests[index].start_time.toLocal();
                       TimeOfDay timepicked =
                           TimeOfDay.fromDateTime(startDateTime);
-                      String meridiem =
-                          timepicked.period.index == 0 ? 'am' : 'pm';
+                      String hour = timepicked.hourOfPeriod.toString();
+                      
+                      String minute = timepicked.minute<10 ? '0'+timepicked.minute.toString():timepicked.minute.toString();
+                      String meridiem = timepicked.period.index == 0 ? 'am': 'pm';
+
                       return ListTile(
                         title: Text(snapshot.data.contests[index].name),
                         onTap: () => launch(snapshot.data.contests[index].url),
@@ -245,9 +251,9 @@ class _ContestListState extends State<ContestList>
                             '/' +
                             startDateTime.month.toString() +
                             ' ' +
-                            timepicked.hourOfPeriod.toString() +
+                            hour +
                             ':' +
-                            timepicked.minute.toString() +
+                             minute +
                             ' ' +
                             meridiem),
                       );

@@ -22,6 +22,7 @@ dependencies:
   flutter_cache_store: ^0.7.0
   intl: ^0.15.8
   async_resource: ^0.1.4
+  shared_preferences: ^0.5.1+2
   flutter:
     sdk: flutter
 
@@ -77,4 +78,3 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/Contest.json
-
