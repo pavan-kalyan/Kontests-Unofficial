@@ -21,6 +21,7 @@ dependencies:
   url_launcher: ^3.0.2
   flutter_cache_store: ^0.7.0
   intl: ^0.15.8
+  flutter_icons: ^1.1.0
   async_resource: ^0.1.4
   shared_preferences: ^0.5.1+2
   flutter:

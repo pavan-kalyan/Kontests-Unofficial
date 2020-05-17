@@ -2,14 +2,11 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
-import 'package:http/http.dart' as http;
 import 'package:kontests/ContestServices.dart';
 import 'package:kontests/Contest.dart';
 import 'package:kontests/SiteServices.dart';
 import 'package:kontests/Site.dart';
-import 'dart:async';
-import 'dart:convert';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(MyApp());
@@ -84,22 +81,45 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 11,
+        length: 10,
         child: Scaffold(
           drawer: Drawer(
-            child: ListView(
+            child: Column(
+              children: [
+               Expanded(
+              child: ListView(
+              padding: EdgeInsets.zero,
               children: <Widget>[
                 DrawerHeader(
-                  child: Text("Kontests App"),
+                  decoration: BoxDecoration(color: Colors.blue),
+                  child: Text("Kontests Unofficial App",
+                  style: TextStyle(color: Colors.white, fontSize:24),),
                 ),
-                ListTile(title: Text("About the App.")),
-                ListTile(title: Text("Developer")),
                 ListTile(
-                  title: Text("Github/pavan-kalyan"),
+                  leading: new Container(
+                    padding: EdgeInsets.all(2),
+                    child: new LayoutBuilder(builder: (context, constraint) {
+                    return new Icon(FlutterIcons.mark_github_oct, size: constraint.biggest.height);
+                    }),
+                  ),
+                  title: Text("Developer"), 
+                  subtitle: Text("github/pavan-kalyan"),
                   onTap: () => launch("https://github.com/pavan-kalyan"),
-                )
+                  ),
               ],
+              ),
             ),
+            Divider(),
+                  Container(
+                      child: Center( 
+                        child: ListTile(
+                          title: Text("Made in Flutter", 
+                            style: TextStyle(fontWeight: FontWeight.w900))
+                      ),
+                      )
+                  )
+              ]
+            )
           ),
           appBar: AppBar(
               title: Text("Kontests Unofficial"),
@@ -122,16 +142,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         isScrollable: true,
                         tabs: <Widget>[
                           Text('Codeforces'),
-                          Text('Codeforces:gym'),
                           Text('TopCoder'),
                           Text('AtCoder'),
                           Text('CS Academy'),
                           Text('CodeChef'),
-                          Text('HackerRank'),
                           Text('HackerEarth'),
                           Text('Kick Start'),
                           Text('LeetCode'),
-                          Text('A2OJ'),
+                          Text('HackerRank'),
+                          Text('Codeforces:gym'),
                         ],
                       );
                     },
@@ -149,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   }));
                 }
                 return TabBarView(
-                  children: List<Widget>.generate(11, (int index) {
+                  children: List<Widget>.generate(10, (int index) {
                     return Center(child: CircularProgressIndicator());
                   }),
                 );
