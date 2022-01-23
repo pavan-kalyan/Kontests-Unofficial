@@ -19,6 +19,10 @@ Future<Contest> loadContest() async {
 
 Future<Contests> loadContests(String site, bool refreshing) async {
   final path = (await getApplicationDocumentsDirectory()).path;
+  //exception for TOPH as the API for this currently does not exist.
+  if (site.toUpperCase() == 'TOPH') {
+    return Contests.fromJson(null);
+  }
   final contests = HttpNetworkResource(
     url: 'https://kontests.net/api/v1/' + site,
     parser: (contents) => json.decode(contents),

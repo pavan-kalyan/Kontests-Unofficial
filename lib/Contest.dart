@@ -15,7 +15,9 @@ class Contests {
   factory Contests.fromJson(List<dynamic> parsedJson) {
     List<Contest> contests = new List<Contest>();
 
-    contests = parsedJson.map((i) => Contest.fromJson(i)).toList();
+    if (parsedJson != null) {
+      contests = parsedJson.map((i) => Contest.fromJson(i)).toList();
+    }
     return new Contests(
       contests: contests,
     );
@@ -46,15 +48,22 @@ class Contest {
     return Contest(
       name: json['name'],
       url: json['url'],
-      start_time: new DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ")
-          .parseUtc(json['start_time']),
-      end_time:
-          new DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ").parseUtc(json['end_time']),
+      start_time: retrieveDateTime(json['site'], json['start_time']),
+      end_time: retrieveDateTime(json['site'], json['end_time']),
       duration: json['duration'],
       site: json['site'],
       in_24_hours: within_24,
       status: json['status'],
     );
+  }
+
+  static DateTime retrieveDateTime(String site, String timeInputString) {
+    try {
+      return new DateFormat("yyyy-MM-ddTHH:mm:ss.SSSZ")
+          .parseUtc(timeInputString);
+    } on FormatException {
+      return new DateFormat("yyyy-MM-dd HH:mm:ss Z").parseUtc(timeInputString);
+    }
   }
 
   String getName() {

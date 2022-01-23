@@ -34,15 +34,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-_launchURL(String url) async {
-  String launchURL = url;
-  if (await canLaunch(launchURL)) {
-    await launch(launchURL);
-  } else {
-    throw 'Could not launch $launchURL';
-  }
-}
-
 class MyHomePage extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -80,124 +71,111 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 10,
-        child: Scaffold(
-          drawer: Drawer(
-            child: Column(
-              children: [
-               Expanded(
-              child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                DrawerHeader(
-                  decoration: BoxDecoration(color: Colors.blue),
-                  child: Text("Kontests Unofficial App",
-                  style: TextStyle(color: Colors.white, fontSize:24),),
-                ),
-                ListTile(
-                  leading: new Container(
-                    padding: EdgeInsets.all(2),
-                    child: new LayoutBuilder(builder: (context, constraint) {
-                    return new Icon(FlutterIcons.mark_github_oct, size: constraint.biggest.height);
-                    }),
+    return FutureBuilder<Sites>(
+        future: sites,
+        builder: (context, snapshot) {
+          var _numOfSites = 11;
+          if (snapshot.hasData) {
+            _numOfSites = snapshot.data.sites.length;
+          }
+
+          return DefaultTabController(
+              length: _numOfSites,
+              child: Scaffold(
+                drawer: Drawer(
+                    child: Column(children: [
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: <Widget>[
+                        DrawerHeader(
+                          decoration: BoxDecoration(color: Colors.blue),
+                          child: Text(
+                            "Kontests Unofficial App",
+                            style: TextStyle(color: Colors.white, fontSize: 24),
+                          ),
+                        ),
+                        ListTile(
+                          leading: new Container(
+                            padding: EdgeInsets.all(2),
+                            child: new LayoutBuilder(
+                                builder: (context, constraint) {
+                              return new Icon(FlutterIcons.mark_github_oct,
+                                  size: constraint.biggest.height);
+                            }),
+                          ),
+                          title: Text("Developer"),
+                          subtitle: Text("github/pavan-kalyan"),
+                          onTap: () =>
+                              launch("https://github.com/pavan-kalyan"),
+                        ),
+                      ],
+                    ),
                   ),
-                  title: Text("Developer"), 
-                  subtitle: Text("github/pavan-kalyan"),
-                  onTap: () => launch("https://github.com/pavan-kalyan"),
-                  ),
-              ],
-              ),
-            ),
-            Divider(),
+                  Divider(),
                   Container(
-                      child: Center( 
-                        child: ListTile(
-                          title: Text("Made in Flutter", 
-                            style: TextStyle(fontWeight: FontWeight.w900))
-                      ),
-                      )
-                  )
-              ]
-            )
-          ),
-          appBar: AppBar(
-              title: Text("Kontests Unofficial"),
-              bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(50.0),
-                  child: FutureBuilder<Sites>(
+                      child: Center(
+                    child: ListTile(
+                        title: Text("Made in Flutter",
+                            style: TextStyle(fontWeight: FontWeight.w900))),
+                  ))
+                ])),
+                appBar: AppBar(
+                    title: Text("Kontests Unofficial"),
+                    bottom: PreferredSize(
+                        preferredSize: Size.fromHeight(50.0),
+                        child: FutureBuilder<Sites>(
+                          future: sites,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return TabBar(
+                                  isScrollable: true,
+                                  tabs: List<Widget>.generate(
+                                      snapshot.data.sites.length, (int index) {
+                                    return new Tab(
+                                      text: snapshot.data.sites[index].name,
+                                    );
+                                  }));
+                            }
+                            return TabBar(
+                              isScrollable: true,
+                              tabs: <Widget>[
+                                Text('Codeforces'),
+                                Text('TopCoder'),
+                                Text('AtCoder'),
+                                Text('CS Academy'),
+                                Text('CodeChef'),
+                                Text('HackerEarth'),
+                                Text('Kick Start'),
+                                Text('LeetCode'),
+                                Text('HackerRank'),
+                                Text('Codeforces:gym'),
+                                Text('Toph'),
+                              ],
+                            );
+                          },
+                        ))),
+                body: FutureBuilder<Sites>(
                     future: sites,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return TabBar(
-                            isScrollable: true,
-                            tabs: List<Widget>.generate(
+                        return TabBarView(
+                            children: List<Widget>.generate(
                                 snapshot.data.sites.length, (int index) {
-                              return new Tab(
-                                text: snapshot.data.sites[index].name,
-                              );
-                            }));
+                          return ContestList(
+                            site: snapshot.data.sites[index].uname,
+                          );
+                        }));
                       }
-                      return TabBar(
-                        isScrollable: true,
-                        tabs: <Widget>[
-                          Text('Codeforces'),
-                          Text('TopCoder'),
-                          Text('AtCoder'),
-                          Text('CS Academy'),
-                          Text('CodeChef'),
-                          Text('HackerEarth'),
-                          Text('Kick Start'),
-                          Text('LeetCode'),
-                          Text('HackerRank'),
-                          Text('Codeforces:gym'),
-                        ],
+                      return TabBarView(
+                        children:
+                            List<Widget>.generate(_numOfSites, (int index) {
+                          return Center(child: CircularProgressIndicator());
+                        }),
                       );
-                    },
-                  ))),
-          body: FutureBuilder<Sites>(
-              future: sites,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return TabBarView(
-                      children: List<Widget>.generate(
-                          snapshot.data.sites.length, (int index) {
-                    return ContestList(
-                      site: snapshot.data.sites[index].uname,
-                    );
-                  }));
-                }
-                return TabBarView(
-                  children: List<Widget>.generate(10, (int index) {
-                    return Center(child: CircularProgressIndicator());
-                  }),
-                );
-              }
-              /*
-                       TabBarView(
-                        children: <Widget>[
-                          ContestList(site: 'codeforces'),
-                          ContestList(site: 'at_coder'),
-                          ContestList(site: 'leet_code'),
-                          ContestList(site: 'top_coder'),
-                          ContestList(site: 'at_coder'),
-                          ContestList(site: 'leet_code'),
-                          ContestList(site: 'top_coder'),
-                          ContestList(site: 'at_coder'),
-                          ContestList(site: 'leet_code'),
-                          ContestList(site: 'top_coder'),
-                          ContestList(site: 'top_coder'),
-                        ],
-                
-                      )
-                      */
-              ),
-        ));
-  }
-
-  Future<Null> _handleRefresh() async {
-    setState(() => refreshing = true);
-    refreshing = false;
+                    }),
+              ));
+        });
   }
 }
 
@@ -207,6 +185,7 @@ class ContestList extends StatefulWidget {
   ContestList({
     this.site,
   });
+
   @override
   createState() => _ContestListState();
 }
@@ -259,9 +238,12 @@ class _ContestListState extends State<ContestList>
                       TimeOfDay timepicked =
                           TimeOfDay.fromDateTime(startDateTime);
                       String hour = timepicked.hourOfPeriod.toString();
-                      
-                      String minute = timepicked.minute<10 ? '0'+timepicked.minute.toString():timepicked.minute.toString();
-                      String meridiem = timepicked.period.index == 0 ? 'am': 'pm';
+
+                      String minute = timepicked.minute < 10
+                          ? '0' + timepicked.minute.toString()
+                          : timepicked.minute.toString();
+                      String meridiem =
+                          timepicked.period.index == 0 ? 'am' : 'pm';
 
                       return ListTile(
                         title: Text(snapshot.data.contests[index].name),
@@ -272,7 +254,7 @@ class _ContestListState extends State<ContestList>
                             ' ' +
                             hour +
                             ':' +
-                             minute +
+                            minute +
                             ' ' +
                             meridiem),
                       );
